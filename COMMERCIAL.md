@@ -5,5 +5,9 @@ This package and libvault are licensed under the GNU Affero General Public Licen
 If the AGPL's terms do not suit how you want to use them, a commercial license is available
 from Vaulte Labs.
 
-Contributions are accepted under a contributor license agreement, so that both can continue to
+To ask for one, open a
+[commercial license request](https://github.com/vaulte-labs/ts/issues/new?template=commercial-license.yml).
+
+Contributions are accepted under a
+[contributor license agreement](https://github.com/vaulte-labs/.github/blob/main/CLA.md), so that both can continue to
 be offered under both licenses.

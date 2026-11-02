@@ -3,6 +3,8 @@
   "description": "Vaulte from TypeScript, over libvault's C ABI",
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
+  "homepage": "https://vaulte.caeser.workers.dev",
+  "repository": "github:vaulte-labs/ts",
   "private": true,
   "type": "module",
   "exports": "./src/index.ts",
