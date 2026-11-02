@@ -81,3 +81,15 @@ test("lock settings come back as they were set, in camelCase", async () => {
   await vault.setLockSettings({ settings });
   expect(await vault.lockSettings()).toEqual(settings);
 });
+
+test("a space can be renamed, and an empty one removed", async () => {
+  await vault.createSpace({ name: "Scratch" });
+  expect(await vault.renameSpace({ name: "Scratch", to: "Notes" })).toBe("Notes");
+  await vault.removeSpace({ name: "Notes" });
+  expect(await vault.spaces()).not.toContain("Notes");
+});
+
+test("with no subscription there is no account and no billing page", async () => {
+  expect(await vault.relayStatus()).toEqual({ account: null, paidUntil: null });
+  expect(await failure(vault.relayBilling())).toMatchObject({ code: "not_found" });
+});

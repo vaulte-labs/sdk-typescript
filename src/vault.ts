@@ -192,7 +192,7 @@ export class Vault {
 
   /** A session for an agent, limited to one space, after a touch. Hand its `token` to `connect`. `reason` is the agent's own words, shown in the prompt after the facts. */
   grant(args: { space?: string; agent: string; seconds: number; reason?: string }) {
-    return this.#call<{ token: string; id: string }>("grant", args);
+    return this.#call<{ token: string; id: string; space: string; seconds: number }>("grant", args);
   }
 
   grants() {
@@ -222,6 +222,16 @@ export class Vault {
 
   createSpace(args: { name: string }) {
     return this.#run("createSpace", args);
+  }
+
+  /** After a touch. Resolves to the name as the library kept it. Personal stays as it is. */
+  renameSpace(args: { name: string; to: string }) {
+    return this.#call<string>("renameSpace", args);
+  }
+
+  /** Removes an empty space after a touch; one holding anything is refused. Creating one with its name brings it back with its history. */
+  removeSpace(args: { name: string }) {
+    return this.#run("removeSpace", args);
   }
 
   items(args: Space = {}) {
@@ -460,6 +470,26 @@ export class Vault {
 
   wipe(args: { deviceName: string }) {
     return this.#run("wipe", args);
+  }
+
+  /** The subscription account this device uses. `paidUntil` is in seconds since 1970, and null when the account service could not be reached. */
+  relayStatus() {
+    return this.#call<{ account: string | null; paidUntil: number | null }>("relayStatus");
+  }
+
+  /** Starts the subscription, making an account if this device has none. Open `url` to pay; keep `account`. */
+  relaySubscribe(args: { email?: string } = {}) {
+    return this.#call<{ account: string; url: string }>("relaySubscribe", args);
+  }
+
+  /** Uses an account the person already has, by its sixteen digits. */
+  relayAccount(args: { number: string }) {
+    return this.#run("relayAccount", args);
+  }
+
+  /** Stripe's page for this device's account, where its person cancels, changes their card or gets invoices. */
+  relayBilling() {
+    return this.#call<string>("relayBilling");
   }
 
   audit() {
