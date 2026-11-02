@@ -273,8 +273,9 @@ export class Vault {
     return this.#run("remove", args);
   }
 
+  /** Reverses this device's last change not undone yet, and resolves to the names of the items it changed back. */
   undo() {
-    return this.#call<number>("undo");
+    return this.#call<string[]>("undo");
   }
 
   history(args: Named) {
