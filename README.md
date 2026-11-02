@@ -1,5 +1,9 @@
 # Vaulte TypeScript SDK
 
+> **[Vaulte](https://vaulte.caeser.workers.dev) is the password manager for you and your agents.** The Mac
+> app, browser extension and `vlt` CLI, with end-to-end encrypted sync across your devices, in one
+> subscription. **[Get Vaulte →](https://vaulte.caeser.workers.dev)**
+
 Use [Vaulte](https://vaulte.caeser.workers.dev) from TypeScript: give an agent a time-boxed grant,
 add and list secrets, fill logins and read 2FA codes, with each approval going to the person. The
 package is `@vaulte/sdk`. It runs on [Bun](https://bun.sh), over the
