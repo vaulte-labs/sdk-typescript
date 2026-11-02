@@ -16,12 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          path: ts
+          path: sdk-typescript
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: vaulte-labs/sdk
-          path: sdk
+          repository: vaulte-labs/sdk-c
+          path: sdk-c
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,6 +30,6 @@ jobs:
           persist-credentials: false
       - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
         with:
-          working_directory: ts
+          working_directory: sdk-typescript
       - run: bun run check
-        working-directory: ts
+        working-directory: sdk-typescript

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "homepage": "https://vaulte.caeser.workers.dev",
-  "repository": "github:vaulte-labs/ts",
+  "repository": "github:vaulte-labs/sdk-typescript",
   "private": true,
   "type": "module",
   "exports": "./src/index.ts",

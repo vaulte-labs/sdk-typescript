@@ -1,8 +1,14 @@
-# @vaulte/sdk
+# Vaulte TypeScript SDK
 
 Use [Vaulte](https://vaulte.caeser.workers.dev) from TypeScript: give an agent a time-boxed grant,
-add and list secrets, fill logins and read 2FA codes, with each approval going to the person. Runs on
-[Bun](https://bun.sh), over Vaulte's [C ABI](https://github.com/vaulte-labs/sdk).
+add and list secrets, fill logins and read 2FA codes, with each approval going to the person. The
+package is `@vaulte/sdk`. It runs on [Bun](https://bun.sh), over the
+[C SDK](https://github.com/vaulte-labs/sdk-c)'s ABI.
+
+| SDK | Repository |
+|---|---|
+| TypeScript, for Bun | this one |
+| C and Swift | [sdk-c](https://github.com/vaulte-labs/sdk-c) |
 
 ```ts
 import { Vault } from "@vaulte/sdk";
@@ -26,10 +32,10 @@ whose `code` says why. Every method is typed in [src/vault.ts](src/vault.ts).
 Not on npm yet. Install it from GitHub:
 
 ```sh
-bun add github:vaulte-labs/ts
+bun add github:vaulte-labs/sdk-typescript
 ```
 
-It needs two things from the [sdk](https://github.com/vaulte-labs/sdk), built as its README says:
+It needs two things from the [C SDK](https://github.com/vaulte-labs/sdk-c), built as its README says:
 
 - `libvaulty.dylib` (or `.so`) where the dynamic loader finds it, such as `/usr/local/lib`, or passed
   as `new Vault({ library: "/path/to/libvaulty.dylib" })`.
@@ -38,11 +44,11 @@ It needs two things from the [sdk](https://github.com/vaulte-labs/sdk), built as
 ## Develop
 
 Clone [libvault](https://github.com/vaulte-labs/libvault) and
-[sdk](https://github.com/vaulte-labs/sdk) beside this repository. You need Bun (pinned in
+[sdk-c](https://github.com/vaulte-labs/sdk-c) beside this repository. You need Bun (pinned in
 `mise.toml`), Rust, and on a Mac, Xcode 26 or its Command Line Tools.
 
 ```sh
-bun run check    # builds the sdk and lvd with test hooks, type-checks, and runs every test
+bun run check    # builds the C SDK and lvd with test hooks, type-checks, and runs every test
 ```
 
 It must pass before every commit.
