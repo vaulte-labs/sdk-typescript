@@ -68,3 +68,16 @@ test("a grant lets an agent into its space and nothing more", async () => {
   await agent.close();
   expect(await failure(agent.spaces())).toMatchObject({ message: "this vault is closed" });
 });
+
+test("each undo names what it changed back, one change at a time", async () => {
+  await vault.addEnv({ name: "FIRST", value: "1" });
+  await vault.addEnv({ name: "SECOND", value: "2" });
+  expect(await vault.undo()).toEqual(["SECOND"]);
+  expect(await vault.undo()).toEqual(["FIRST"]);
+});
+
+test("lock settings come back as they were set, in camelCase", async () => {
+  const settings = { stayUnlocked: "ten_minutes", withScreen: false } as const;
+  await vault.setLockSettings({ settings });
+  expect(await vault.lockSettings()).toEqual(settings);
+});

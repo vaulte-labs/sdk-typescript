@@ -62,7 +62,7 @@ export class Vault {
       else pending?.resolve(renameKeys(reply.result, toCamel));
     };
     this.#worker.onerror = (event) => {
-      for (const { reject } of this.#pending.values()) reject(new Error(event.message));
+      for (const { reject } of this.#pending.values()) reject(new VaulteError(event.message, "error"));
       this.#pending.clear();
       this.#unrefWhenIdle();
     };
@@ -190,8 +190,8 @@ export class Vault {
     return this.#call<T.Status>("status");
   }
 
-  /** A session for an agent, limited to one space, after a touch. Hand its `token` to `connect`. */
-  grant(args: { space?: string; agent: string; seconds: number }) {
+  /** A session for an agent, limited to one space, after a touch. Hand its `token` to `connect`. `reason` is the agent's own words, shown in the prompt after the facts. */
+  grant(args: { space?: string; agent: string; seconds: number; reason?: string }) {
     return this.#call<{ token: string; id: string }>("grant", args);
   }
 
@@ -269,8 +269,24 @@ export class Vault {
     return this.#run("edit", args);
   }
 
+  /** After a touch. `history` and `restore` bring it back. */
   remove(args: Named) {
     return this.#run("remove", args);
+  }
+
+  /** Removes several items as one change, so one `undo` brings them all back. */
+  removeAll(args: { items: Named[] }) {
+    return this.#run("removeAll", args);
+  }
+
+  /** Shows an item in the space `to` as well, after a touch. Later changes reach every copy. */
+  link(args: Named & { to: string }) {
+    return this.#run("link", args);
+  }
+
+  /** Takes an item out of its space and into `to`, after a touch, as one change. */
+  move(args: Named & { to: string }) {
+    return this.#run("move", args);
   }
 
   /** Reverses this device's last change not undone yet, and resolves to the names of the items it changed back. */
@@ -296,8 +312,23 @@ export class Vault {
     return this.#call<T.Code>("code", args);
   }
 
+  /** Every login's current code in `space`, or every space, after one touch. */
+  codes(args: Space = {}) {
+    return this.#call<T.SpaceCode[]>("codes", args);
+  }
+
   removeCode(args: Named) {
     return this.#run("removeCode", args);
+  }
+
+  /** When this device's vault locks by itself. */
+  lockSettings() {
+    return this.#call<T.LockSettings>("lockSettings");
+  }
+
+  /** Changes when this device's vault locks by itself, after a touch. No agent can. */
+  setLockSettings(args: { settings: T.LockSettings }) {
+    return this.#run("setLockSettings", args);
   }
 
   /** Cards that run out soon. Never asks for a touch. */
@@ -305,6 +336,7 @@ export class Vault {
     return this.#call<T.Item[]>("expiring");
   }
 
+  /** Only the vault's own signed app may call this; anyone else is denied. */
   autofillIdentities() {
     return this.#call<T.AutofillIdentity[]>("autofillIdentities");
   }

@@ -13,7 +13,7 @@
     "check": "sh scripts/check.sh"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "typescript": "latest"
+    "@types/bun": "^1.4.4",
+    "typescript": "^7.0.2"
   }
 }

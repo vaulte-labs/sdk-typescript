@@ -17,9 +17,9 @@ package is `@vaulte/sdk`. It runs on [Bun](https://bun.sh), over the
 ```ts
 import { Vault } from "@vaulte/sdk";
 
-// Lets deploy-bot use the Work space for an hour, after a touch.
+// Lets deploy-bot use the Personal space for an hour, after a touch.
 const vault = new Vault();
-const { token } = await vault.grant({ space: "Work", agent: "deploy-bot", seconds: 3600 });
+const { token } = await vault.grant({ space: "Personal", agent: "deploy-bot", seconds: 3600, reason: "deploy the site" });
 
 // The agent's side, usually another process.
 const agent = new Vault();
@@ -27,7 +27,8 @@ await agent.connect({ session: token });
 console.log(await agent.items());
 ```
 
-Each call runs on a thread of its own and may wait while a person approves it. Policy stays in the
+Each `Vault` runs its calls one at a time on a thread of its own, so a call waiting for a person
+holds up the next; use a second `Vault` to run calls side by side. Policy stays in the
 broker, so nothing here can do more than the person allowed. A failure rejects with a `VaulteError`
 whose `code` says why. Every method is typed in [src/vault.ts](src/vault.ts).
 

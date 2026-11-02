@@ -1,7 +1,16 @@
 // What libvault sends back, with its field names in camelCase.
 
 /** Stable across every Vaulte interface, so an agent can act on it. */
-export type ErrorCode = "error" | "locked" | "needs_passphrase" | "denied" | "not_found" | "needs_person" | "needs_host";
+export type ErrorCode =
+  | "error"
+  | "locked"
+  | "needs_passphrase"
+  | "denied"
+  | "not_found"
+  | "needs_person"
+  | "needs_host"
+  /** The broker running is older than this library. Restarting it brings the new one. */
+  | "outdated";
 
 export type Kind = "login" | "card" | "env" | "note" | "ssh" | "passkey" | "wifi" | "profile" | "icon";
 
@@ -23,6 +32,10 @@ export interface Meta {
 
 export interface Item extends Meta {
   space: string;
+  /** The other spaces this same item is in, when the caller may know of them. */
+  alsoIn?: string[];
+  /** The item's home, when this copy is one linked from there. */
+  linkedFrom?: string;
 }
 
 export interface Profile {
@@ -65,7 +78,12 @@ export interface Status {
   /** Nothing else holds this vault: no other device, and no backup that can be reached now. */
   lastCopy: boolean;
   problems: string[];
+  /** This connection is one of the vault's own signed apps, so everyday use needs no touch while open. */
+  trusted: boolean;
+  /** Which build the broker is. */
   build: string;
+  /** Changes whenever the vault does, from any caller or device. Only whether it changed means anything. */
+  revision: number;
 }
 
 export interface Grant {
@@ -83,6 +101,21 @@ export interface Version {
 export interface Code {
   code: string;
   secondsLeft: number;
+}
+
+/** One login's code, and where it is. */
+export interface SpaceCode extends Code {
+  space: string;
+  name: string;
+}
+
+export type StayUnlocked = "five_minutes" | "ten_minutes" | "one_hour" | "two_hours" | "never";
+
+/** When this device's vault locks by itself. */
+export interface LockSettings {
+  stayUnlocked: StayUnlocked;
+  /** Whether locking the screen, or the device sleeping, locks the vault too. */
+  withScreen: boolean;
 }
 
 /** Four bytes per pixel, red, green, blue and alpha, row by row from the top. */
