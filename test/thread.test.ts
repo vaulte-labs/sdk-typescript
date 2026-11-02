@@ -5,7 +5,7 @@ import { join } from "node:path";
 
 import { Vault } from "../src/index.ts";
 
-const library = new URL("../../sdk/target/dylib/debug/libvaulty.dylib", import.meta.url).pathname;
+const library = new URL("../../sdk-c/target/dylib/debug/libvaulty.dylib", import.meta.url).pathname;
 
 // scripts/check.sh runs this without LV_FAST_KDF, so a passphrase takes long enough to watch.
 test("a call that takes a while leaves the main thread free", async () => {

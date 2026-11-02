@@ -5,9 +5,9 @@ import { join } from "node:path";
 
 import { Vault, VaulteError } from "../src/index.ts";
 
-// scripts/check.sh builds this with the sdk's test hooks, where a passphrase stands in for a touch,
+// scripts/check.sh builds this with the C SDK's test hooks, where a passphrase stands in for a touch,
 // and points LV_DAEMON at a matching broker.
-const library = new URL("../../sdk/target/dylib/debug/libvaulty.dylib", import.meta.url).pathname;
+const library = new URL("../../sdk-c/target/dylib/debug/libvaulty.dylib", import.meta.url).pathname;
 
 const passphrase = "test passphrase";
 const folder = mkdtempSync(join(tmpdir(), "vaulte-ts-"));
