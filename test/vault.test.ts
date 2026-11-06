@@ -76,6 +76,21 @@ test("each undo names what it changed back, one change at a time", async () => {
   expect(await vault.undo()).toEqual(["FIRST"]);
 });
 
+test("taking a code off is part of one edit, and history marks a restore and the versions that match now", async () => {
+  await vault.addLogin({ name: "coded.example", password: "pw", totp: "JBSWY3DPEHPK3PXP" });
+  const { space, ...meta } = await vault.item({ name: "coded.example" });
+  await vault.edit({ name: "coded.example", meta: { ...meta, username: "me" }, removeCode: true });
+  expect(await vault.item({ name: "coded.example" })).toMatchObject({ username: "me" });
+  expect(await vault.item({ name: "coded.example" })).not.toHaveProperty("twoFactor");
+  await vault.restore({ name: "coded.example", version: 0 });
+  expect((await vault.history({ name: "coded.example" })).map(({ restored, identical }) => [restored, identical])).toEqual([
+    [false, true],
+    [false, false],
+    [true, true],
+  ]);
+  expect(await failure(vault.addEnv({ name: "FIRST_TAKEN", value: "1" }).then(() => vault.addEnv({ name: "FIRST_TAKEN", value: "2" })))).toMatchObject({ code: "exists" });
+});
+
 test("lock settings come back as they were set, in camelCase", async () => {
   const settings = { stayUnlocked: "ten_minutes", withScreen: false } as const;
   await vault.setLockSettings({ settings });

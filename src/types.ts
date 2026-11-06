@@ -3,10 +3,14 @@
 /** Stable across every Vaulte interface, so an agent can act on it. */
 export type ErrorCode =
   | "error"
+  /** The call itself was wrong, such as a value out of range. */
+  | "usage"
   | "locked"
   | "needs_passphrase"
   | "denied"
   | "not_found"
+  /** Something by that name is already there. Nothing changed. */
+  | "exists"
   | "needs_person"
   | "needs_host"
   /** The broker running is older than this library. Restarting it brings the new one. */
@@ -93,9 +97,20 @@ export interface Grant {
   secondsLeft: number;
 }
 
+/** One version of an item, oldest first, as `restore` numbers them. */
 export interface Version {
   atMs: number;
   deleted: boolean;
+  /** Its name then, or the last it had before it was deleted. */
+  name: string;
+  /** What it changed from the version before: `name`, `username`, `urls`, `hosts`, `two_factor` or `secret`. */
+  changed: string[];
+  /** What the item holds now. A deleted item has no current version. */
+  current: boolean;
+  /** Written by a restore or an undo, bringing back an earlier version. */
+  restored: boolean;
+  /** Holds exactly what the item holds now, so restoring it would change nothing. */
+  identical: boolean;
 }
 
 export interface Code {

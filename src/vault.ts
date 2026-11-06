@@ -274,8 +274,12 @@ export class Vault {
     return this.#run("addProfile", args);
   }
 
-  /** Changes what is shown, and the secret only when one is given, after a touch. The old version stays in its history. */
-  edit(args: Named & { meta: T.Meta; secret?: T.Secret }) {
+  /**
+   * Changes what is shown, and the secret only when one is given, after a touch. A login keeps its
+   * two-factor unless `removeCode` takes it off, in the same change, so one `undo` reverses all of
+   * it. The old version stays in its history.
+   */
+  edit(args: Named & { meta: T.Meta; secret?: T.Secret; removeCode?: boolean }) {
     return this.#run("edit", args);
   }
 
@@ -325,10 +329,6 @@ export class Vault {
   /** Every login's current code in `space`, or every space, after one touch. */
   codes(args: Space = {}) {
     return this.#call<T.SpaceCode[]>("codes", args);
-  }
-
-  removeCode(args: Named) {
-    return this.#run("removeCode", args);
   }
 
   /** When this device's vault locks by itself. */
